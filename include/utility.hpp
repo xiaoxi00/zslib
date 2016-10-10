@@ -77,10 +77,17 @@ namespace util{
             };
     }
     namespace Function{
+        //TupleType:存放参数包的tuple的类型
+        //return_type:绑定的函数的返回值类型
+        //T:绑定的函数的类型
+        //index:当前参数的索引
+        //max:参数的个数
         template <typename TupleType,typename return_type,typename T,size_t index,size_t max>
             struct __Call{
                 template <typename ...Args>
                 static return_type call(T &f,TupleType& Tp,Args ...__Args){
+                    //递归往__Args中添加参数
+                    //当index和max相等时，说明已经添加到了最后一个参数
                     return __Call<TupleType,return_type,T,index + 1,max>::call(f,Tp,__Args...,std::get<index>(Tp));
                 }
             };
@@ -88,6 +95,7 @@ namespace util{
             struct __Call<TupleType,return_type,T,max,max>{
                 template <typename ...Args>
                 static return_type call(T &f,TupleType& Tp,Args ...__Args){
+                    //直接调用f所指的函数
                     return f(__Args...);
                 }
             };
@@ -96,8 +104,8 @@ namespace util{
             typedef T function_type;
             typedef std::tuple<Args...> ArgsTpType;
             typedef typename type_traits::result_type<T>::type return_type;
-            function_type &fun;
             ArgsTpType ArgsPack;
+            function_type &fun;
             Bind_t(T &function,Args ...__Args):ArgsPack(std::tuple<Args...>(__Args...)),fun(function){ }
             return_type operator()(){
                     return __Call<ArgsTpType,return_type,T,0,sizeof...(Args)>::call(fun,ArgsPack);
