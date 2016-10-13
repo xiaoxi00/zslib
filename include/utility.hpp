@@ -5,11 +5,11 @@
   * Email	: zerozakiGeek@gmail.com
   * Date	: 2016-10-04
   */
-#ifndef __UTILITY__HPP
-#define __UTILITY__HPP
+#ifndef __ZSLIB__UTILITY__HPP
+#define __ZSLIB__UTILITY__HPP
 #include <stddef.h>
 #include <tuple>
-namespace util{
+namespace zslib{
     namespace type_traits{
         struct true_type{
             static constexpr bool value = true;
@@ -88,7 +88,7 @@ namespace util{
                 static return_type call(T &f,TupleType& Tp,Args ...__Args){
                     //递归往__Args中添加参数
                     //当index和max相等时，说明已经添加到了最后一个参数
-                    return __Call<TupleType,return_type,T,index + 1,max>::call(f,Tp,__Args...,std::get<index>(Tp));
+                    return __Call<TupleType,return_type,T,index + 1,max>::call(f,Tp,std::forward<Args>(__Args)...,std::forward<decltype(std::get<index>(Tp))>(std::get<index>(Tp)));
                 }
             };
         template <typename TupleType,typename return_type,typename T,size_t max>
@@ -113,7 +113,7 @@ namespace util{
         };
         template <typename T,typename ...Args>
         Bind_t<T,Args...> bind(T &fun,Args... __Args){
-        return Bind_t<T,Args...>(fun,__Args...);
+        return Bind_t<T,Args...>(fun,std::forward<Args>(__Args)...);
         }
     }
 }
