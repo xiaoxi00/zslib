@@ -28,34 +28,29 @@ namespace zslib{
             T value;
         };
     template <size_t index,size_t max,typename T,typename ...Args>
-        struct tuple_type_at{
-            typedef typename tuple_type_at<index +1,max,Args...>::value_type value_type;
-        };
-    template <size_t index,typename T,typename ...Args>
-        struct tuple_type_at<index,0,T,Args...>{
-            typedef T value_type;
+        struct get_tuple_type{
+            typedef typename get_tuple_type<index + 1,max,Args...>::type type;
         };
     template <size_t max,typename T,typename ...Args>
-        struct tuple_type_at<max,max,T,Args...>{
-            typedef T value_type;
+        struct get_tuple_type<max,max,T,Args...>{
+            typedef T type;
         };
     template <size_t index,size_t max,typename T,typename ...Args>
-        struct tuple_value_at{
-            static typename tuple_type_at<index,max,T,Args...>::value_type tuple_value(zslib::tuple<Args...>& Tp){
-                return tuple_value_at<index + 1,max,Args...>::tuple_value(Tp.child_tuple);
+        struct  get_tuple_value{
+            static typename get_tuple_type<0,max,Args...>::type& get_value(zslib::tuple<Args...>& Tp){
+                return get_tuple_value<index + 1,max,Args...>::get_value(Tp.child_tuple);
             }
         };
     template <size_t max,typename T,typename ...Args>
-        struct tuple_value_at<max,max,T,Args...>{
-            static typename tuple_type_at<max,max,Args...>::value_type tuple_value(zslib::tuple<Args...>& Tp){
+        struct get_tuple_value<max,max,T,Args...>{
+            static typename get_tuple_type<0,max,Args...>::type& get_value(zslib::tuple<Args...>& Tp){
                 return Tp.value;
             }
         };
-    //template <typename T,typename ...Args>
-    template <const size_t index,typename ...Args>
-        tuple_type_at<0,index,Args...> tuple_get(zslib::tuple<Args...>& Tp){
-            //return index?Tp.value:
-        }      
+    template <size_t index,typename ...Args>
+        typename get_tuple_type<0,index,Args...>::type get(zslib::tuple<Args...>& Tp){
+            return get_tuple_value<0,index,int,Args...>::get_value(Tp);
+        }
 
 }
 #endif
