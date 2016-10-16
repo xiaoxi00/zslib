@@ -10,4 +10,4 @@ LOCAL_CXX := \
 LOCAL_CXXFLAGS := \
 	-std=c++11 -Wall -Werror
 all:
-	$(foreach f,$(LOCAL_SRC_FILES),$(info $(LOCAL_CXX) $(basename $(f) <= $(f)))$(shell $(LOCAL_CXX) $(LOCAL_CXXFLAGS) -o $(basename $(f)) $(f)))
+	$(foreach f,$(LOCAL_SRC_FILES),$(info $(LOCAL_CXX) $(basename $(f)) <= $(f)))$(shell $(LOCAL_CXX) $(LOCAL_CXXFLAGS) -o $(basename $(f)) $(f))

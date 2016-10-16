@@ -9,8 +9,8 @@
 #include <iostream>
 int main(){
     zslib::tuple<int,char,const char*> tp(10,'x',"hh");
-    //std::cout << std::is_same<zslib::get_tuple_type<0,1,int,char,const char*>::type,char>::value << std::endl;
+    zslib::get<0>(tp) = 100;
+    std::cout << zslib::get<0>(tp) << std::endl;
     std::cout << zslib::get<1>(tp) << std::endl;
-        
     return 0;
 }
