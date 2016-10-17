@@ -16,8 +16,8 @@ namespace zslib{
             tuple(T &val,Args... __Args):value(val),child_tuple(__Args...){ }
             tuple(T &&val,Args&&... __Args):value(std::move(val)),child_tuple(std::forward<Args>(__Args)...){ }
             tuple(const T& val,const Args&... __Args):value(std::forward<T>(val)),child_tuple(std::forward<Args>(__Args)...){ }
-            tuple<Args...> child_tuple;
             T value;
+            tuple<Args...> child_tuple;
         };
     template <typename T>
         struct tuple<T>{
